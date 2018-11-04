@@ -3,9 +3,13 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 
-INITIAL_X = 1.4
-INITIAL_Y = -21.76698207998232
-ENDING_X = 7
+INITIAL_X_1 = 1
+INITIAL_Y_1 = 0.5
+ENDING_X_1 = 1.3889999999999572
+
+INITIAL_X_2 = 1.4
+INITIAL_Y_2 = -21.76698207998232
+ENDING_X_2 = 7
 DELTA = 0.001
 
 
@@ -101,51 +105,46 @@ def extract_errors(reference, calculated):
     return erros, max
 
 
-x1, y1 = reference_solution(1, 0.5, INITIAL_X)
-x2, y2 = reference_solution(INITIAL_X, INITIAL_Y, ENDING_X)
-x = x1 + x2
-y = y1 + y2
-
-reference_x = x
-reference_y = y
+x1, y1 = reference_solution(INITIAL_X_1, INITIAL_Y_1, ENDING_X_1)
+x2, y2 = reference_solution(INITIAL_X_2, INITIAL_Y_2, ENDING_X_2)
+reference_x = x1 + x2
+reference_y = y1 + y2
 
 fig, ax = plt.subplots()
-ax.plot(x, y)
-ax.set_ylim(-20, 20)
+ax.scatter(reference_x, reference_y)
+ax.set_ylim(-30, 40)
 
-x1, y1 = euler(1, 0.5, INITIAL_X)
-x2, y2 = euler(INITIAL_X, INITIAL_Y, ENDING_X)
+x1, y1 = euler(1, 0.5, INITIAL_X_2)
+x2, y2 = euler(INITIAL_X_2, INITIAL_Y_2, ENDING_X_2)
 
 x = x1 + x2
 y = y1 + y2
-ax.plot(x, y)
+ax.scatter(x, y)
 
 err_fig, err_ax = plt.subplots()
 erros, max = extract_errors(reference_y, y)
 err_ax.plot(erros)
 err_fig.savefig("err_euler.png")
 
-
-x1, y1 = improved_euler(1, 0.5, INITIAL_X)
-x2, y2 = improved_euler(INITIAL_X, INITIAL_Y, ENDING_X)
+x1, y1 = improved_euler(1, 0.5, INITIAL_X_2)
+x2, y2 = improved_euler(INITIAL_X_2, INITIAL_Y_2, ENDING_X_2)
 
 x = x1 + x2
 y = y1 + y2
-ax.plot(x, y)
+ax.scatter(x, y)
 
 err_fig, err_ax = plt.subplots()
 erros, max = extract_errors(reference_y, y)
 err_ax.plot(erros)
 err_fig.savefig("err_improved_euler.png")
 
-
-x1, y1 = runge_kutta(1, 0.5, INITIAL_X)
-x2, y2 = runge_kutta(INITIAL_X, INITIAL_Y, ENDING_X)
+x1, y1 = runge_kutta(1, 0.5, INITIAL_X_2)
+x2, y2 = runge_kutta(INITIAL_X_2, INITIAL_Y_2, ENDING_X_2)
 
 x = x1 + x2
 y = y1 + y2
 
-ax.plot(x, y)
+ax.scatter(x, y)
 
 err_fig, err_ax = plt.subplots()
 erros, max = extract_errors(reference_y, y)
