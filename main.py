@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 INITIAL_X = 1.4
-INITIAL_Y = -2.35403
+INITIAL_Y = -21.76698207998232
 ENDING_X = 7
 DELTA = 0.001
 MIN_Y = -100
@@ -73,10 +73,8 @@ def runge_kutta(x0, y0, x):
     return x, y
 
 
-
 x1, y1 = reference_solution(1, 0.5, INITIAL_X)
 x2, y2 = reference_solution(INITIAL_X, INITIAL_Y, ENDING_X)
-
 x = x1 + x2
 y = y1 + y2
 fig, ax = plt.subplots()
