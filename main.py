@@ -46,6 +46,19 @@ def euler(x0, y0, x):
     return x, y
 
 
+def improved_euler(x0, y0, x):
+    x = [i for i in np.arange(x0, x + DELTA, DELTA)]
+    y = [y0]
+
+    for i, v in enumerate(x):
+        if i == 0:
+            continue
+        value = y[i - 1] + DELTA / 2 * (f(x[i - 1], y[i - 1]) + f(x[i], y[i - 1] + DELTA * f(x[i - 1], y[i - 1])))
+        y.insert(i, value)
+
+    return x, y
+
+
 def runge_kutta(x0, y0, x):
     def calculate(x, y):
         k1 = DELTA * f(x, y)
@@ -111,6 +124,20 @@ err_fig, err_ax = plt.subplots()
 erros, max = extract_errors(reference_y, y)
 err_ax.plot(erros)
 err_fig.savefig("err_euler.png")
+
+
+x1, y1 = improved_euler(1, 0.5, INITIAL_X)
+x2, y2 = improved_euler(INITIAL_X, INITIAL_Y, ENDING_X)
+
+x = x1 + x2
+y = y1 + y2
+ax.plot(x, y)
+
+err_fig, err_ax = plt.subplots()
+erros, max = extract_errors(reference_y, y)
+err_ax.plot(erros)
+err_fig.savefig("err_improved_euler.png")
+
 
 x1, y1 = runge_kutta(1, 0.5, INITIAL_X)
 x2, y2 = runge_kutta(INITIAL_X, INITIAL_Y, ENDING_X)
