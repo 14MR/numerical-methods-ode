@@ -4,6 +4,7 @@ import numpy as np
 
 
 class ODESolver:
+    ASYMPTOTE = 1.37  # some day it will be not hardcoded but not today
     INITIAL_X_1 = 1
     INITIAL_Y_1 = 0.5
     ENDING_X_1 = 1.3889
@@ -18,20 +19,31 @@ class ODESolver:
     improved_euler_calculated = None
     runge_kutta_calculated = None
 
-    def __init__(self, initial_x_1=1, initial_y_1=0.5, ending_x_1=1.37, initial_x_2=1.4,
-                 initial_y_2=-21.76698207998232,
-                 ending_x_2=3, n=1000):
-        self.INITIAL_X_1 = initial_x_1
-        self.INITIAL_Y_1 = initial_y_1
-        self.ENDING_X_1 = ending_x_1
+    def __init__(self, initial_x, initial_y, ending_x, n=1000):
+        if initial_x > self.ASYMPTOTE:
+            self.INITIAL_X_1 = 0
+            self.INITIAL_Y_1 = 0
+            self.ENDING_X_1 = 0
 
-        self.INITIAL_X_2 = initial_x_2
-        self.INITIAL_Y_2 = initial_y_2
-        self.ENDING_X_2 = ending_x_2
-        self.DELTA = (abs((ending_x_1 - initial_x_1)) + abs((ending_x_2 - initial_x_2))) / n
+            self.INITIAL_X_2 = initial_x
+            self.INITIAL_Y_2 = initial_y
+            self.ENDING_X_2 = ending_x
+            self.DELTA = abs((ending_x - initial_x)) / n
+        else:
+
+            self.INITIAL_X_1 = initial_x
+            self.INITIAL_Y_1 = initial_y
+            self.ENDING_X_1 = self.ASYMPTOTE
+
+            self.INITIAL_X_2 = 1.4  # precalculated and hardcoded IVP after asymptote
+            self.INITIAL_Y_2 = -21.76698207998232
+            self.ENDING_X_2 = ending_x
+            self.DELTA = (abs((self.ASYMPTOTE - initial_x)) + abs((self.ENDING_X_2 - self.INITIAL_X_2))) / n
 
     def calculate_reference(self):
-        x1, y1 = self.reference_solution(self.INITIAL_X_1, self.INITIAL_Y_1, self.ENDING_X_1)
+        x1, y1 = [], []
+        if self.ENDING_X_1 != self.INITIAL_X_1:
+            x1, y1 = self.reference_solution(self.INITIAL_X_1, self.INITIAL_Y_1, self.ENDING_X_1)
         x2, y2 = self.reference_solution(self.INITIAL_X_2, self.INITIAL_Y_2, self.ENDING_X_2)
         reference_x = x1 + x2
         reference_y = y1 + y2
@@ -41,7 +53,9 @@ class ODESolver:
         return reference_x, reference_y
 
     def calculate_euler(self):
-        x1, y1 = self.euler(self.INITIAL_X_1, self.INITIAL_Y_1, self.ENDING_X_1)
+        x1, y1 = [], []
+        if self.ENDING_X_1 != self.INITIAL_X_1:
+            x1, y1 = self.euler(self.INITIAL_X_1, self.INITIAL_Y_1, self.ENDING_X_1)
         x2, y2 = self.euler(self.INITIAL_X_2, self.INITIAL_Y_2, self.ENDING_X_2)
 
         x = x1 + x2
@@ -56,7 +70,9 @@ class ODESolver:
         return errors, max
 
     def calculate_improved_euler(self):
-        x1, y1 = self.improved_euler(self.INITIAL_X_1, self.INITIAL_Y_1, self.ENDING_X_1)
+        x1, y1 = [], []
+        if self.ENDING_X_1 != self.INITIAL_X_1:
+            x1, y1 = self.improved_euler(self.INITIAL_X_1, self.INITIAL_Y_1, self.ENDING_X_1)
         x2, y2 = self.improved_euler(self.INITIAL_X_2, self.INITIAL_Y_2, self.ENDING_X_2)
 
         x = x1 + x2
@@ -71,7 +87,9 @@ class ODESolver:
         return errors, max
 
     def calculate_runge_kutta(self):
-        x1, y1 = self.runge_kutta(self.INITIAL_X_1, self.INITIAL_Y_1, self.ENDING_X_1)
+        x1, y1 = [], []
+        if self.ENDING_X_1 != self.INITIAL_X_1:
+            x1, y1 = self.runge_kutta(self.INITIAL_X_1, self.INITIAL_Y_1, self.ENDING_X_1)
         x2, y2 = self.runge_kutta(self.INITIAL_X_2, self.INITIAL_Y_2, self.ENDING_X_2)
 
         x = x1 + x2

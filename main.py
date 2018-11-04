@@ -16,12 +16,14 @@ def cli():
 
 
 @cli.command()
-@click.option('-x', default=1, help='X coordinate for IVP')
-@click.option('-y', default=0.5, help='Y coordinate for IVP')
+@click.option('-x0', default=1.0, help='X coordinate for IVP')
+@click.option('-y0', default=0.5, help='Y coordinate for IVP')
+@click.option('-x', default=7, help='Ending X coordinate')
 @click.option('-n', default=10000, help='Number of grid steps')
-def plot_graphs(x, y, n):
+def plot_graphs(x0, y0, n, x):
     """Command for plotting graphs"""
-    solver = ODESolver(initial_x_1=x, initial_y_1=y, n=n)
+
+    solver = ODESolver(initial_x=x0, initial_y=y0, n=n, ending_x=x)
     reference_x, reference_y = solver.calculate_reference()
     fig, ax = plt.subplots()
     ax.plot(reference_x, reference_y)
@@ -56,7 +58,7 @@ def plot_graphs(x, y, n):
 
     fig.savefig(f"{directory_for_files}all.png")
 
-    click.echo(f'Generating succeed. Checkout your {directory_for_files} directory.')
+    click.echo(f'Generating succeed. Check out your {directory_for_files} directory.')
 
 
 @cli.command()
