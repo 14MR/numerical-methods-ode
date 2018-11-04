@@ -7,7 +7,7 @@ import numpy as np
 
 INITIAL_X = 1
 INITIAL_Y = 0.5
-ENDING_X = 7
+ENDING_X = 1.37
 DELTA = 0.01
 my_asymp_coordinate = 1.37
 MIN_Y = -100
@@ -87,6 +87,36 @@ def euler():
     return x, y
 
 
+def runge_kutta():
+    def calculate(x, y):
+        k1 = DELTA * f(x, y)
+        k2 = DELTA * f(x + DELTA / 2, y + k1 / 2)
+        k3 = DELTA * f(x + DELTA / 2, y + k2 / 2)
+        k4 = DELTA * f(x + DELTA, y + k3)
+
+        return y + (k1 + k2 + k3 + k4) / 6
+
+    x = [i for i in np.arange(INITIAL_X, ENDING_X + DELTA, DELTA)]  # TODO: посмотреть границы для правой части
+    y = [INITIAL_Y]
+
+    # try:
+    for i, v in enumerate(x):
+        if i == 0:
+            continue
+
+        value = calculate(x[i - 1], y[i - 1])
+        if value > MAX_Y:
+            value = float('inf')
+
+        y.insert(i, value)
+    # except:
+    #     pass
+
+    x, y = x[:len(y)], y
+
+    return x, y
+
+
 x, y = reference_solution()
 
 # for i, v in enumerate(x):
@@ -101,3 +131,8 @@ fig, ax = plt.subplots()
 # ax.axvline(linewidth=my_asymp_coordinate, color='r')
 ax.plot(x, y)
 fig.savefig("euler.png")
+
+x, y = runge_kutta()
+fig, ax = plt.subplots()
+ax.plot(x, y)
+fig.savefig("runge.png")
