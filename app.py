@@ -6,7 +6,7 @@ def index():
     return static_file('index.html', root='.')
 
 
-@route('/data')
+@route('/data/')
 def data():
     n = int(request.query.n)
     starting_x = float(request.query.starting_x)

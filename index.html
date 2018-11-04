@@ -3,8 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <title>ODE solver</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
 </head>
 <body>
+<canvas id="line-chart" width="800" height="450"></canvas>
+<script>
 
+    function draw_graph(data) {
+
+        let params = {
+            type: 'line',
+            data: {
+                labels: data[0].x,
+                datasets: []
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Different methods for solving ODE'
+                }
+            }
+        };
+
+        for (let i = 0; i < data.length; i++) {
+            params.data.datasets.push({
+                data: data[i].y,
+                label: data[i].title,
+                borderColor: "#"+((1<<24)*Math.random()|0).toString(16),
+                fill: false
+            })
+        }
+
+        let myChart = new Chart(document.getElementById("line-chart"), params);
+    }
+
+    var request = $.ajax({
+        url: "/data/",
+        method: "GET"
+    });
+
+    request.done(function (msg) {
+        draw_graph(msg);
+    });
+</script>
 </body>
 </html>
