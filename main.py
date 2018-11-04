@@ -7,8 +7,6 @@ INITIAL_X = 1.4
 INITIAL_Y = -21.76698207998232
 ENDING_X = 7
 DELTA = 0.001
-MIN_Y = -100
-MAX_Y = 10000
 
 
 def f(x, y):
@@ -73,12 +71,33 @@ def runge_kutta(x0, y0, x):
     return x, y
 
 
+def extract_errors(reference, calculated):
+    erros = []
+    max = 0
+
+    for i in range(len(reference) - 1):
+        if (i > 0 and abs(
+                reference[i] - reference[i - 1]) < DELTA) or i == 0:  # if our step is bigger than delta => we had an
+            # asymptote
+            value = abs(reference[i] - calculated[i])
+            if value != float('inf'):  # let's skip errors which is inf
+                erros.append(value)
+                if max < value:
+                    max = value
+
+    return erros, max
+
+
 x1, y1 = reference_solution(1, 0.5, INITIAL_X)
 x2, y2 = reference_solution(INITIAL_X, INITIAL_Y, ENDING_X)
 x = x1 + x2
 y = y1 + y2
+
+reference_x = x
+reference_y = y
+
 fig, ax = plt.subplots()
-ax.plot(x[:len(y)], y[:len(x)])
+ax.plot(x, y)
 ax.set_ylim(-20, 20)
 
 x1, y1 = euler(1, 0.5, INITIAL_X)
@@ -86,7 +105,12 @@ x2, y2 = euler(INITIAL_X, INITIAL_Y, ENDING_X)
 
 x = x1 + x2
 y = y1 + y2
-ax.plot(x[:len(y)], y[:len(x)])
+ax.plot(x, y)
+
+err_fig, err_ax = plt.subplots()
+erros, max = extract_errors(reference_y, y)
+err_ax.plot(erros)
+err_fig.savefig("err_euler.png")
 
 x1, y1 = runge_kutta(1, 0.5, INITIAL_X)
 x2, y2 = runge_kutta(INITIAL_X, INITIAL_Y, ENDING_X)
@@ -94,5 +118,11 @@ x2, y2 = runge_kutta(INITIAL_X, INITIAL_Y, ENDING_X)
 x = x1 + x2
 y = y1 + y2
 
-ax.plot(x[:len(y)], y[:len(x)])
+ax.plot(x, y)
+
+err_fig, err_ax = plt.subplots()
+erros, max = extract_errors(reference_y, y)
+err_ax.plot(erros)
+err_fig.savefig("err_runge.png")
+
 fig.savefig("runge.png")
