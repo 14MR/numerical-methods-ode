@@ -91,8 +91,7 @@ class ODESolver:
 
     def reference_solution(self, x0, y0, x):
         def const_function(x, y):
-            # return -(3 * math.exp(2 * x) / y + math.exp(3 * x))
-            return 6 * math.exp(2) + math.exp(3)
+            return 3 * math.exp(2 * x) / y + math.exp(3 * x)
 
         def my_function(x, constant):
             return (3 * math.exp(2 * x)) / (constant - math.exp(3 * x))
@@ -118,6 +117,8 @@ class ODESolver:
             value = y[i - 1] + self.DELTA * self.f(x[i - 1], y[i - 1])
             y.insert(i, value)
 
+        x, y = x[:len(y)], y[:len(x)]
+
         return x, y
 
     def improved_euler(self, x0, y0, x):
@@ -130,6 +131,8 @@ class ODESolver:
             value = y[i - 1] + self.DELTA / 2 * (
                     self.f(x[i - 1], y[i - 1]) + self.f(x[i], y[i - 1] + self.DELTA * self.f(x[i - 1], y[i - 1])))
             y.insert(i, value)
+
+        x, y = x[:len(y)], y[:len(x)]
 
         return x, y
 
@@ -153,7 +156,7 @@ class ODESolver:
 
             y.insert(i, value)
 
-        x, y = x[:len(y)], y
+        x, y = x[:len(y)], y[:len(x)]
 
         return x, y
 
