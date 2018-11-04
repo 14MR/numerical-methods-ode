@@ -1,15 +1,12 @@
-# import numpy as np
 import math
 
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-INITIAL_X = 1
-INITIAL_Y = 0.5
-ENDING_X = 1.37
-DELTA = 0.01
-my_asymp_coordinate = 1.37
+INITIAL_X = 1.4
+INITIAL_Y = -2.35403
+ENDING_X = 7
+DELTA = 0.001
 MIN_Y = -100
 MAX_Y = 10000
 
@@ -31,11 +28,9 @@ def reference_solution(x0, y0, x):
     x = [i for i in np.arange(x0, x + DELTA, DELTA)]  # TODO: посмотреть границы для правой части
     y = []
 
-    try:
-        for i, v in enumerate(x):
-            y.insert(i, my_function(v, const))
-    except:
-        pass
+    for i, v in enumerate(x):
+        value = my_function(v, const)
+        y.insert(i, value)
 
     return x, y
 
@@ -48,8 +43,6 @@ def euler(x0, y0, x):
         if i == 0:
             continue
         value = y[i - 1] + DELTA * f(x[i - 1], y[i - 1])
-        if value > MAX_Y:
-            value = float('inf')
         y.insert(i, value)
 
     return x, y
@@ -62,7 +55,7 @@ def runge_kutta(x0, y0, x):
         k3 = DELTA * f(x + DELTA / 2, y + k2 / 2)
         k4 = DELTA * f(x + DELTA, y + k3)
 
-        return y + (k1 + k2 + k3 + k4) / 6
+        return y + (k1 + 2 * k2 + 2 * k3 + k4) / 6
 
     x = [i for i in np.arange(x0, x + DELTA, DELTA)]  # TODO: посмотреть границы для правой части
     y = [y0]
@@ -72,8 +65,6 @@ def runge_kutta(x0, y0, x):
             continue
 
         value = calculate(x[i - 1], y[i - 1])
-        if value > MAX_Y:
-            value = float('inf')
 
         y.insert(i, value)
 
@@ -82,19 +73,28 @@ def runge_kutta(x0, y0, x):
     return x, y
 
 
-x, y = reference_solution(INITIAL_X, INITIAL_Y, ENDING_X)
 
+x1, y1 = reference_solution(1, 0.5, INITIAL_X)
+x2, y2 = reference_solution(INITIAL_X, INITIAL_Y, ENDING_X)
 
+x = x1 + x2
+y = y1 + y2
 fig, ax = plt.subplots()
-ax.plot(x[:len(y)], y)
-fig.savefig("reference.png")
+ax.plot(x[:len(y)], y[:len(x)])
+ax.set_ylim(-20, 20)
 
-x, y = euler(INITIAL_X, INITIAL_Y, ENDING_X)
-fig, ax = plt.subplots()
-ax.plot(x, y)
-fig.savefig("euler.png")
+x1, y1 = euler(1, 0.5, INITIAL_X)
+x2, y2 = euler(INITIAL_X, INITIAL_Y, ENDING_X)
 
-x, y = runge_kutta(INITIAL_X, INITIAL_Y, ENDING_X)
-fig, ax = plt.subplots()
-ax.plot(x, y)
+x = x1 + x2
+y = y1 + y2
+ax.plot(x[:len(y)], y[:len(x)])
+
+x1, y1 = runge_kutta(1, 0.5, INITIAL_X)
+x2, y2 = runge_kutta(INITIAL_X, INITIAL_Y, ENDING_X)
+
+x = x1 + x2
+y = y1 + y2
+
+ax.plot(x[:len(y)], y[:len(x)])
 fig.savefig("runge.png")
