@@ -18,7 +18,7 @@ def cli():
 @cli.command()
 @click.option('-x0', default=1.0, help='X coordinate for IVP')
 @click.option('-y0', default=0.5, help='Y coordinate for IVP')
-@click.option('-x', default=7, help='Ending X coordinate')
+@click.option('-x', default=7.0, help='Ending X coordinate')
 @click.option('-n', default=10000, help='Number of grid steps')
 def plot_graphs(x0, y0, n, x):
     """Command for plotting graphs"""
