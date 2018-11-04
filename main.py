@@ -41,14 +41,7 @@ def reference_solution(x0, y0, x):
 
 
 def euler(x0, y0, x):
-    def function_y(x):
-        if x <= INITIAL_X:
-            return INITIAL_Y
-        else:
-            return function_y(x - DELTA) + DELTA * f(x - DELTA, function_y(x - DELTA))
-
     x = [i for i in np.arange(x0, x + DELTA, DELTA)]
-
     y = [y0]
 
     for i, v in enumerate(x):
@@ -58,8 +51,6 @@ def euler(x0, y0, x):
         if value > MAX_Y:
             value = float('inf')
         y.insert(i, value)
-
-    x, y = x[:len(y)], y
 
     return x, y
 
@@ -76,7 +67,6 @@ def runge_kutta(x0, y0, x):
     x = [i for i in np.arange(x0, x + DELTA, DELTA)]  # TODO: посмотреть границы для правой части
     y = [y0]
 
-    # try:
     for i, v in enumerate(x):
         if i == 0:
             continue
@@ -86,8 +76,6 @@ def runge_kutta(x0, y0, x):
             value = float('inf')
 
         y.insert(i, value)
-    # except:
-    #     pass
 
     x, y = x[:len(y)], y
 
@@ -96,8 +84,6 @@ def runge_kutta(x0, y0, x):
 
 x, y = reference_solution(INITIAL_X, INITIAL_Y, ENDING_X)
 
-# for i, v in enumerate(x):
-#     print(x[i], y[i], '\n')
 
 fig, ax = plt.subplots()
 ax.plot(x[:len(y)], y)
@@ -105,7 +91,6 @@ fig.savefig("reference.png")
 
 x, y = euler(INITIAL_X, INITIAL_Y, ENDING_X)
 fig, ax = plt.subplots()
-# ax.axvline(linewidth=my_asymp_coordinate, color='r')
 ax.plot(x, y)
 fig.savefig("euler.png")
 
