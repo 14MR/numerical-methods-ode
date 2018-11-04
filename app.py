@@ -1,8 +1,13 @@
-from bottle import route, run, request
+from bottle import route, run, request, static_file
 
 
 @route('/')
 def index():
+    return static_file('index.html', root='.')
+
+
+@route('/data')
+def data():
     n = int(request.query.n)
     starting_x = float(request.query.starting_x)
     starting_y = float(request.query.starting_y)
@@ -57,6 +62,11 @@ def index():
     ]
     response.content_type = 'application/json'
     return dumps(rv)
+
+
+@route('/static/<filename>')
+def server_static(filename):
+    return static_file(filename, root='./static')
 
 
 run(host='localhost', port=8080, debug=True, reloader=True)
