@@ -18,9 +18,9 @@ class ODESolver:
     improved_euler_calculated = None
     runge_kutta_calculated = None
 
-    def __init__(self, initial_x_1=1, initial_y_1=0.5, ending_x_1=1.3889, initial_x_2=1.4,
+    def __init__(self, initial_x_1=1, initial_y_1=0.5, ending_x_1=1.37, initial_x_2=1.4,
                  initial_y_2=-21.76698207998232,
-                 ending_x_2=7, n=10000):
+                 ending_x_2=3, n=1000):
         self.INITIAL_X_1 = initial_x_1
         self.INITIAL_Y_1 = initial_y_1
         self.ENDING_X_1 = ending_x_1
