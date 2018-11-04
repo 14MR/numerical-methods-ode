@@ -173,3 +173,28 @@ class ODESolver:
                         max = value
 
         return errors, max
+
+    @staticmethod
+    def investigate_global_errors(start, end, step=100):
+        euler_errors = []
+        improved_euler_errors = []
+        runge_kutta_errors = []
+
+        for i in range(start, end, step):
+            print(f'Calculating global error for N={i}\n')
+            solver = ODESolver(n=i)
+            solver.calculate_reference()
+
+            solver.calculate_euler()
+            err, max = solver.calculate_euler_errors()
+            euler_errors.append(max)
+
+            solver.calculate_improved_euler()
+            err, max = solver.calculate_improved_euler_errors()
+            improved_euler_errors.append(max)
+
+            solver.calculate_runge_kutta()
+            err, max = solver.calculate_runge_kutta_errors()
+            runge_kutta_errors.append(max)
+
+        return euler_errors, improved_euler_errors, runge_kutta_errors

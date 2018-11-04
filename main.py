@@ -36,3 +36,18 @@ err_ax.plot(err)
 err_fig.savefig("err_runge.png")
 
 fig.savefig("runge.png")
+
+
+euler_errors, improved_euler_errors, runge_kutta_errors = ODESolver.investigate_global_errors(1000, 10000)
+
+err_fig, err_ax = plt.subplots()
+err_ax.plot(euler_errors)
+err_fig.savefig("global_euler.png")
+
+err_fig, err_ax = plt.subplots()
+err_ax.plot(improved_euler_errors)
+err_fig.savefig("improved_euler.png")
+
+err_fig, err_ax = plt.subplots()
+err_ax.plot(runge_kutta_errors)
+err_fig.savefig("runge_kutta.png")
