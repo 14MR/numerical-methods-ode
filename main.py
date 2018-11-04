@@ -25,7 +25,7 @@ def reference_solution(x0, y0, x):
 
     const = const_function(x0, y0)
 
-    x = [i for i in np.arange(x0, x + DELTA, DELTA)]  # TODO: посмотреть границы для правой части
+    x = [i for i in np.arange(x0, x + DELTA, DELTA)]
     y = []
 
     for i, v in enumerate(x):
@@ -57,7 +57,7 @@ def runge_kutta(x0, y0, x):
 
         return y + (k1 + 2 * k2 + 2 * k3 + k4) / 6
 
-    x = [i for i in np.arange(x0, x + DELTA, DELTA)]  # TODO: посмотреть границы для правой части
+    x = [i for i in np.arange(x0, x + DELTA, DELTA)]
     y = [y0]
 
     for i, v in enumerate(x):
