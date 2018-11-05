@@ -36,9 +36,10 @@ def plot_graphs(x0, y0, n, x):
 
     err_fig, err_ax = plt.subplots()
     err, max = solver.calculate_euler_errors()
-
+    plt.xlabel('x coordinate')
+    plt.ylabel('size of error')
     err_ax.plot(err)
-    err_fig.savefig(f"{directory_for_files}err_euler.png", bbox_inches="tight")
+    err_fig.savefig(f"{directory_for_files}local_err_euler.png", bbox_inches="tight")
 
     x, y = solver.calculate_improved_euler()
     ax.plot(x, y)
@@ -47,8 +48,8 @@ def plot_graphs(x0, y0, n, x):
     err, max = solver.calculate_improved_euler_errors()
     err_ax.plot(err)
     plt.xlabel('x coordinate')
-    plt.ylabel('error size')
-    err_fig.savefig(f"{directory_for_files}err_improved_euler.png", bbox_inches="tight")
+    plt.ylabel('size of error')
+    err_fig.savefig(f"{directory_for_files}local_err_improved_euler.png", bbox_inches="tight")
 
     x, y = solver.calculate_runge_kutta()
 
@@ -56,9 +57,10 @@ def plot_graphs(x0, y0, n, x):
 
     err_fig, err_ax = plt.subplots()
     err, max = solver.calculate_runge_kutta_errors()
-
+    plt.xlabel('x coordinate')
+    plt.ylabel('size of error')
     err_ax.plot(err)
-    err_fig.savefig(f"{directory_for_files}err_runge.png", bbox_inches="tight")
+    err_fig.savefig(f"{directory_for_files}local_err_runge.png", bbox_inches="tight")
 
     fig.savefig(f"{directory_for_files}all.png", bbox_inches="tight")
 
