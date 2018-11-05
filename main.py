@@ -26,6 +26,8 @@ def plot_graphs(x0, y0, n, x):
     solver = ODESolver(initial_x=x0, initial_y=y0, n=n, ending_x=x)
     reference_x, reference_y = solver.calculate_reference()
     fig, ax = plt.subplots()
+    plt.xlabel('x coordinate')
+    plt.ylabel('y coordinate')
     ax.plot(reference_x, reference_y)
     ax.set_ylim(-23, 16)
 
@@ -36,7 +38,7 @@ def plot_graphs(x0, y0, n, x):
     err, max = solver.calculate_euler_errors()
 
     err_ax.plot(err)
-    err_fig.savefig(f"{directory_for_files}err_euler.png")
+    err_fig.savefig(f"{directory_for_files}err_euler.png", bbox_inches="tight")
 
     x, y = solver.calculate_improved_euler()
     ax.plot(x, y)
@@ -44,7 +46,9 @@ def plot_graphs(x0, y0, n, x):
     err_fig, err_ax = plt.subplots()
     err, max = solver.calculate_improved_euler_errors()
     err_ax.plot(err)
-    err_fig.savefig(f"{directory_for_files}err_improved_euler.png")
+    plt.xlabel('x coordinate')
+    plt.ylabel('error size')
+    err_fig.savefig(f"{directory_for_files}err_improved_euler.png", bbox_inches="tight")
 
     x, y = solver.calculate_runge_kutta()
 
@@ -54,9 +58,9 @@ def plot_graphs(x0, y0, n, x):
     err, max = solver.calculate_runge_kutta_errors()
 
     err_ax.plot(err)
-    err_fig.savefig(f"{directory_for_files}err_runge.png")
+    err_fig.savefig(f"{directory_for_files}err_runge.png", bbox_inches="tight")
 
-    fig.savefig(f"{directory_for_files}all.png")
+    fig.savefig(f"{directory_for_files}all.png", bbox_inches="tight")
 
     click.echo(f'Generating succeed. Check out your {directory_for_files} directory.')
 
@@ -78,7 +82,7 @@ def global_errors(start, end, step):
 
     with click.progressbar(r) as bar:
         for i in bar:
-            solver = ODESolver(n=i)
+            solver = ODESolver(initial_y=0.5, initial_x=1, ending_x=7, n=i)
             solver.calculate_reference()
 
             solver.calculate_euler()
@@ -94,16 +98,22 @@ def global_errors(start, end, step):
             runge_kutta_errors.append(max)
 
     err_fig, err_ax = plt.subplots()
+    plt.xlabel('number of grid steps')
+    plt.ylabel('max local error')
     err_ax.plot(euler_errors)
-    err_fig.savefig(f"{directory_for_files}global_euler.png")
+    err_fig.savefig(f"{directory_for_files}global_euler.png", bbox_inches="tight")
 
     err_fig, err_ax = plt.subplots()
+    plt.xlabel('number of grid steps')
+    plt.ylabel('max local error')
     err_ax.plot(improved_euler_errors)
-    err_fig.savefig(f"{directory_for_files}improved_euler.png")
+    err_fig.savefig(f"{directory_for_files}global_improved_euler.png", bbox_inches="tight")
 
     err_fig, err_ax = plt.subplots()
+    plt.xlabel('number of grid steps')
+    plt.ylabel('max local error')
     err_ax.plot(runge_kutta_errors)
-    err_fig.savefig(f"{directory_for_files}runge_kutta.png")
+    err_fig.savefig(f"{directory_for_files}global_runge_kutta.png", bbox_inches="tight")
 
 
 if __name__ == '__main__':
